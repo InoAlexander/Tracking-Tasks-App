@@ -1,0 +1,15 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="mt-5">
+    @*Code to display issues in the database below will add a link to the homepage to acces the form we will be executing*@
+    @* the "asp-page' inside of the <a> tag is known as a tag helper, it allows for dynamically generatied html elements -> inside of the quotes we can set it to a specific page similar to how it is done inside of a controller.*@
+    <a asp-page="/Issues/New" class="w-20 btn btn m-2"> + Add new</a>
+    @*displaying a message to the user, accessing the issues property*@
+    @if (Model.Issues.Count() == 0) { 
+        <h1>No Issues to Display</h1>
+    }
+</div>
