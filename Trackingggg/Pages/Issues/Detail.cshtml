@@ -1,0 +1,51 @@
+﻿@page "{id:int}"
+@using Humanizer
+@using Trackingggg.Extensions
+@model Trackingggg.Pages.Issues.DetailModel
+@{
+}
+
+@*before displaying the issues property first check if it exists -> if not displays a message to the user*@
+<div class="mt-5">
+    @if (Model.Issue == null)
+    {
+        <div class="alert alert-warning" role="alert">
+            no issue found
+        </div>
+    }
+    else
+    {
+        <div>
+            <h3>@Model.Issue.Title</h3>
+            @*displays the issue type in a badge*@
+            <div class="mb-4">
+                <span class="badge bg-info ">@Model.Issue.IssueType </span>
+                @*the value of this css class will come from the extension method located inthe Extensions folder*@
+                <span class="@Model.Issue.Priority.ToCssClass()">@Model.Issue.Priority</span>
+                <span class="badge bg-info">@Model.Issue.Created.Humanize(utcDate:false)</span>
+                <p>@Model.Issue.Description</p>
+                <button id="resolveButton" data-issueid="@Model.Issue.Id" type="submit">Resolve Issue</button>
+            </div>
+        </div>
+    }
+</div>
+
+@* because its not in a form we have to submit using javascript, maybe not the most ideal but it will work -> if you look at the _layout.cshtml in the shared folder you will see a "rendersection;scrips" tag thats where this is coming from. It will render on the layout page -> its a way to load the script at the end of the layout.*@
+@section Scripts{
+    <script>
+        $(function(){
+            var resolveBtn = document.getElementById('resolveButton')
+            resolveButton.addEventListener('click', function(e){
+                e.preventDefault()
+
+                @* returning the id of an issue through a custom attribute*@
+                var issueId = resolveBtn.getAttribute('data-issueid')
+                $.get(`?handler=resolve&id=${issueId}`, function(){
+                    alert(`Issue ${issueId} has been resolved.`)
+                    @*setting the alert to go to the homepage*@
+                    window.location.href = '/'
+                })
+            })
+        })
+    </script>
+}

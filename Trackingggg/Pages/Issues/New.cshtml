@@ -1,10 +1,40 @@
 ﻿@page
+@using Trackingggg.Models
 @model Trackingggg.Pages.Issues.NewModel
 @{
 }
 @*Adding a form*@
 <div class="mt-5">
+
     <form method="post">
+    @*Title*@
+        <div class="form-group">
+            <label asp-for="Issue.Title" class="form-label mb-3"> Title </label>
+            <input asp-for="Issue.Title" class="form-control" />
+        @*to display errors on the page, we will use validation tag helpers*@
+            <span asp-validation-for="Issue.Title" class="text text-danger"></span>
+        </div>
+    @*Description*@
+        <div class="form-group">
+            <label asp-for="Issue.Description" class="form-label mt-3"> Description </label>
+            <textarea asp-for="Issue.Description" class="form-control" rows="3" ></textarea>
+            <span asp-validation-for="Issue.Description" class="text text-danger"></span>
+        </div>
+    @*Issue Type*@
+        <div class="form-group">
+            <label asp-for="Issue.IssueType" class="form-label mt-3"> Issue Type </label>
+            @*the select will be our dropdown-> the tag helpers for asp-items tag helper will allow us to display the items inside of this tage elements for the different issue types.*@
+            <select class="form-select " asp-for="Issue.IssueType"
+            asp-items="Html.GetEnumSelectList<IssueType>()"></select>
+        </div>
+    @*Priority*@
+        <div class="form-group">
+            <label asp-for="Issue.Priority" class="form-label mt-3"> Priority </label>
+            <select class="form-select" asp-for="Issue.Priority"
+            asp-items="Html.GetEnumSelectList<Priority>()"></select>
+        </div>
+    @*button for form submission*@
+        <button class="wt-20 mt-3 col-12 btn btn-primary btn-lg">Submit Issue</button>
 
     </form>
 </div>

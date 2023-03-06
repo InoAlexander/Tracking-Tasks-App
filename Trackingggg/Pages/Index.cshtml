@@ -1,4 +1,6 @@
 ﻿@page
+@using Humanizer
+@using Trackingggg.Extensions
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
@@ -7,9 +9,35 @@
 <div class="mt-5">
     @*Code to display issues in the database below will add a link to the homepage to acces the form we will be executing*@
     @* the "asp-page' inside of the <a> tag is known as a tag helper, it allows for dynamically generatied html elements -> inside of the quotes we can set it to a specific page similar to how it is done inside of a controller.*@
-    <a asp-page="/Issues/New" class="w-20 btn btn m-2"> + Add new</a>
+    <a asp-page="/Issues/New" class="w-20 btn btn-primary m-2"> + Add new</a>
     @*displaying a message to the user, accessing the issues property*@
     @if (Model.Issues.Count() == 0) { 
-        <h1>No Issues to Display</h1>
+        <h1 class="text-center">No Issues to Display</h1>
+    } else {
+        @*will iterate over the rows of issues -> using the @ symbol we can call to methods and db types*@
+        <div class="row g-0">
+            @foreach (var issue in Model.Issues)
+            {
+            <div class="card col-3 m-2">
+                <div class="card text-center">
+                    <div class="card-header">
+                        @issue.IssueType
+                    </div>
+                    <div class="card-body">
+                        @*asp-page inside of a link tag will redirect to the route specified and route ID*@
+                        <h5 class="card-title text-truncate">
+                            <a asp-page="/Issues/Detail" asp-route-id="@issue.Id" class="link-dark text-decoration-none">@issue.Title</a>
+                        </h5>
+                        @*we will need to create an extension method for the priority enumeration. go to "Extensions" folder*@
+                        <span class="@issue.Priority.ToCssClass()">@issue.Priority</span>
+                    </div>
+                    <div class="card-footer text-muted">
+                        @*displaying the created property -> the method .Humanize() is from the humanizer nuget package to make it look better.*@
+                        <small>@issue.Created.Humanize(utcDate:false)</small>
+                    </div>
+                </div>
+            </div>
+            }
+        </div>
     }
 </div>
